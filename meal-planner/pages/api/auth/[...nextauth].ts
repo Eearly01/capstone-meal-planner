@@ -1,34 +1,55 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+import { connectToMongoDB } from '@/lib/mongodb'
+import { compare } from 'bcryptjs'
+import User from '@/models/user'
+import NextAuth, { NextAuthOptions } from 'next-auth'
+import CredentialsProvider from 'next-auth/providers/credentials'
+import { IUser } from '@/types'
 
-const authOptions: NextAuthOptions = {
-    session: {
-        strategy: 'jwt'
-    },
-    providers: [
+const options : NextAuthOptions = {
+    providers:[
         CredentialsProvider({
-            type: 'credentials',
-            credentials: {},
-            authorize(credentials, req) {
-                const {email, password} = credentials as {
-                    email: string;
-                    password: string;
-                };
+            id: 'credentials',
+            name: 'Credentials',
+            credentials: {
+                email: {label: 'Email', type: 'text'},
+                password: {label: 'Password', type: 'text'}
+            },
+            async authorize(credentials) {
+                await connectToMongoDB().catch(err => {throw new Error(err)})
 
-                // Beginning login logic
-                // Finds user from my db
-                if  (email !== "elijah@gmail.com" || password !== "123") {
-                    throw new Error('Invalid username or password');
+                const user = await User.findOne({
+                    email: credentials?.email
+                }).select('+password')
+
+                if(!user) {
+                    throw new Error('Invalid credentials')
+                }
+                const isPasswordCorrect = await compare(credentials!.password, user.password)
+
+                if(!isPasswordCorrect) {
+                    throw new Error('Invalid credentials')
                 }
 
-                return {id: '1234', name: 'Elijah Early', email: 'elijah@gmail.com'}
+                return user
             }
         })
     ],
     pages: {
-        signIn: '/auth/signIn',
-        signOut: '/auth/signOut',
+        signIn: '/login'
     },
+    session: {
+        strategy: 'jwt'
+    },
+    callbacks: {
+        jwt: async ({token, user}) => {
+            user && (token.user = user)
+            return token
+        },
+        session: async({session, token}) => {
+            const user = token.IUser as IUser
+            session.user = user
+            return session
+        }
+    }
 }
-
-export default NextAuth(authOptions);
+export default NextAuth(options)
