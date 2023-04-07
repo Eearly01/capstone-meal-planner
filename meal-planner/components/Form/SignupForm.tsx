@@ -1,8 +1,14 @@
-import * as React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router'
 import axios, { AxiosError } from 'axios';
 import { loginUser } from '@/helpers';
+import { Container, Form, FormTitle, InfoText, InfoTextContainer } from './FormElements';
+import InputField from './InputField';
+import { BsPerson } from 'react-icons/bs'
+import { AiOutlineMail, AiOutlineUnlock } from 'react-icons/ai';
+import { RiLockPasswordLine } from 'react-icons/ri'
+import Button from '../Button';
+import Link from 'next/link';
 
 const SignupForm = () => {
     const [data, setData] = useState({
@@ -63,6 +69,60 @@ const SignupForm = () => {
         }
     }
 
+    return (
+			<Container>
+				<Form onSubmit={handleSignup}>
+					<FormTitle> Sign Up </FormTitle>
+					<InputField
+						type='text'
+						placeholder={'Username'}
+						value={data.username}
+						onChange={(e) => setData(e.target.value)}
+						icon={<BsPerson />}
+						required
+					/>
+					<InputField
+						type='text'
+						placeholder={'Email'}
+						value={data.email}
+						onChange={(e) => setData(e.target.value)}
+						icon={<AiOutlineMail />}
+						required
+					/>
+					<InputField
+						type='text'
+						placeholder={'Password'}
+						value={data.password}
+						onChange={(e) => setData(e.target.value)}
+						icon={<AiOutlineUnlock />}
+						required
+					/>
+					<InputField
+						type='text'
+						placeholder={'Confirm Password'}
+						value={data.confirmPassword}
+						onChange={(e) => setData(e.target.value)}
+						icon={<RiLockPasswordLine />}
+						required
+					/>
 
+                    <Button 
+                        title={'Sugn up'}
+                        type={'submit'}
+                    />
+
+                    <InfoTextContainer>
+                        <InfoText>
+                            Already have an account?
+                        </InfoText>
+                        <Link href={'/login'}>
+                            Login
+                        </Link>
+                    </InfoTextContainer>
+				</Form>
+			</Container>
+		);
 
 }
+
+export default SignupForm

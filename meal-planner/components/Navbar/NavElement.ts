@@ -23,6 +23,7 @@ export const NavLink = styled(Link)<{large?: boolean}>`
     padding: 1rem;
     margin: 1rem;
     font-size: ${props => props.large ? '1.5rem' : '1rem'};
+    color: ${props => props.color || '#132424'};
 
     &:hover {
         color: #a6a2a2;
@@ -35,6 +36,7 @@ export const NavLink = styled(Link)<{large?: boolean}>`
 
 export const MenuIcon = styled(GiHamburgerMenu)`
     cursor: pointer;
+    margin: 0 1rem;
 `
 
 export const CloseIcon = styled(AiFillCloseCircle)`
