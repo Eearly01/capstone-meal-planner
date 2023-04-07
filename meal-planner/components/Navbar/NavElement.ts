@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 import Link from "next/link"
+import { GiHamburgerMenu } from 'react-icons/gi'
+import { AiFillCloseCircle } from 'react-icons/ai'
 
 export const Nav = styled.nav`
     height: 80px;
@@ -17,11 +19,47 @@ export const NavLinkContainer = styled.div`
     align-items: center;
 `
 
-export const NavLink = styled(Link)`
+export const NavLink = styled(Link)<{large?: boolean}>`
     padding: 1rem;
     margin: 1rem;
+    font-size: ${props => props.large ? '1.5rem' : '1rem'};
 
     &:hover {
         color: #a6a2a2;
     }
+
+    &.active {
+        color: #03a062;
+    }
+`
+
+export const MenuIcon = styled(GiHamburgerMenu)`
+    cursor: pointer;
+`
+
+export const CloseIcon = styled(AiFillCloseCircle)`
+    cursor: pointer;
+`
+
+export const OverlayMenu = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #123421;
+`
+export const MenuLinkContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+`
+export const CloseButtonContainer = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 1.5rem;
+    position: absolute;
 `
