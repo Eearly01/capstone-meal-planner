@@ -1,10 +1,14 @@
 import React from 'react'
 import { Container } from './ButtonElements'
-import { ButtonPorps } from '@/types/propTypes'
+import { ButtonProps } from '@/types/propTypes'
 
-const Button = ({title, type}: ButtonPorps) => {
+const Button = ({title, type, disabled, onClick}: ButtonProps) => {
     return (
-        <Container type={type}>
+        <Container 
+        type={type}
+        disabled={disabled}
+        onClick={onClick}
+        >
             {title}
         </Container>
     )

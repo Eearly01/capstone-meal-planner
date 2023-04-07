@@ -14,16 +14,14 @@ import Button from '../Button';
 type Props = {}
 
 const LoginForm = (props: Props) => {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
+    const [data, setData] = useState({
+        username: '',
+        password: ''
+    })
 
-    const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setUsername(e.target.value)
-    }
-
-    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPassword(e.target.value)
-    }
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+			setData({ ...data, [e.target.name]: e.target.value });
+		};
 
     const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -37,9 +35,10 @@ const LoginForm = (props: Props) => {
 					<InputField
 						placeholder='Username'
 						type='username'
+						name='username'
 						icon={<AiOutlineMail />}
-						value={username}
-						onChange={handleUsernameChange}
+						value={data.username}
+						onChange={handleInputChange}
 						required
 					/>
 
@@ -47,27 +46,21 @@ const LoginForm = (props: Props) => {
 						placeholder='Password'
 						type='password'
 						icon={<AiOutlineMail />}
-						value={password}
-						onChange={handlePasswordChange}
+						value={data.password}
+						onChange={handleInputChange}
 						required
+						name='password'
 					/>
 
 					<Link href='/forgot-password'>Forgot Password?</Link>
 
-                    <Button 
-                        type='submit'
-                        title='login'
-                    />
+					<Button type='submit' title='login' />
 
-                    <InfoTextContainer>
-                        <InfoText>
-                            New User?
-                        </InfoText>
+					<InfoTextContainer>
+						<InfoText>New User?</InfoText>
 
-                        <Link href='/signup'>
-                            Create an Account
-                        </Link>
-                    </InfoTextContainer>
+						<Link href='/signup'>Create an Account</Link>
+					</InfoTextContainer>
 				</Form>
 			</Container>
 		);

@@ -10,6 +10,6 @@ export interface IUser {
 }
 
 export interface LoginUserParams {
-    email: string;
+    username: string;
     password: string;
 }

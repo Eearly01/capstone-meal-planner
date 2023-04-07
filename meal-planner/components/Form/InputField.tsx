@@ -7,7 +7,7 @@ import {
     ShowPassIcon
 } from './InputFieldElements'
 
-const InputField = ({placeholder, icon, type, required, value, onChange}: InputProps) => {
+const InputField = ({placeholder, icon, type, required, value, onChange, name}: InputProps) => {
     const [showPassword, setShowPassword] = useState(false);
 
     const togglePasswordIcon = () => {
@@ -37,6 +37,7 @@ const InputField = ({placeholder, icon, type, required, value, onChange}: InputP
             required={required}
             value={value}
             onChange={onChange}
+            name={name}
             />
 
             {

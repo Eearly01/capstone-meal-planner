@@ -11,6 +11,8 @@ const UserSchema = new Schema({
         type: String,
         unique: [true, "Username is already taken"],
         required: [true, "Full name is required"],
+        minLength: [4, "Username should be at least 4 characters long"],
+        maxLength: [30, "Username hsould be less than 30 characters"]
     },
     password: {
         type: String,

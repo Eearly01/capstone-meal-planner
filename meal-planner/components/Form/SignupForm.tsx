@@ -1,128 +1,162 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 import axios, { AxiosError } from 'axios';
-import { loginUser } from '@/helpers';
-import { Container, Form, FormTitle, InfoText, InfoTextContainer } from './FormElements';
+import { getErrorMsg, loginUser } from '@/helpers';
+import {
+	Container,
+	Form,
+	FormTitle,
+	InfoText,
+	InfoTextContainer,
+} from './FormElements';
 import InputField from './InputField';
-import { BsPerson } from 'react-icons/bs'
+import { BsPerson } from 'react-icons/bs';
 import { AiOutlineMail, AiOutlineUnlock } from 'react-icons/ai';
-import { RiLockPasswordLine } from 'react-icons/ri'
+import { RiLockPasswordLine } from 'react-icons/ri';
 import Button from '../Button';
 import Link from 'next/link';
+import { InputErrors } from '@/types/error';
+import { ErrorText } from './InputFieldElements';
 
 const SignupForm = () => {
-    const [data, setData] = useState({
-        username: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
-    })
+	const [data, setData] = useState({
+		username: '',
+		email: '',
+		password: '',
+		confirmPassword: '',
+	});
 
-    const [submitError, setSubmitError] = useState<string>('')
-    const [loading, setLoading] = useState(false)
-    const router = useRouter()
+	const [validationErrors, setValidateErrors] = useState<InputErrors[]>([]);
 
-    const validateData = (): boolean => {
-        const err = [];
+	const [submitError, setSubmitError] = useState<string>('');
+	const [loading, setLoading] = useState(false);
+	const router = useRouter();
 
-        if(data.password !== data.confirmPassword) {
-            err.push({confirmPassword: "Passwords don't match"})
-        }
+	const validateData = (): boolean => {
+		const err = [];
 
-        if(err.length > 0) {
-            return false
-        } else {
-            return true
-        }
+		if (data.username?.length < 4) {
+			err.push({ username: 'Username must be at least 4 characters long' });
+		} else if (data.username?.length > 30) {
+			err.push({ username: 'Username must be shorter than 30 characters' });
+		} else if (data.password?.length < 6) {
+			err.push({ password: 'Password must be at least 6 characters long' });
+		} else if (data.password !== data.confirmPassword) {
+			err.push({ confirmPassword: "Passwords don't match" });
+		}
+
+        setValidateErrors(err)
+
+		if (err.length > 0) {
+			return false;
+		} else {
+			return true;
+		}
+	};
+
+	const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+
+		const isValid = validateData();
+
+		if (isValid) {
+			try {
+				setLoading(true);
+				const apiRes = await axios.post(
+					'http://localhost:3000/api/auth/signup',
+					data
+				);
+
+				if (apiRes?.data?.success) {
+					const loginRes = await loginUser({
+						username: data.username,
+						password: data.password,
+					});
+
+					if (loginRes && !loginRes.ok) {
+						setSubmitError(loginRes.error || '');
+					} else {
+						router.push('/');
+					}
+				}
+			} catch (error: unknown) {
+				if (error instanceof AxiosError) {
+					const errorMsg = error.response?.data?.error;
+					setSubmitError(errorMsg);
+				}
+			}
+			setLoading(false);
+		}
+	};
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setData({...data, [e.target.name]: e.target.value})
     }
 
-    const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+	return (
+		<Container>
+			<Form onSubmit={handleSignup}>
+				<FormTitle> Sign Up </FormTitle>
+				<InputField
+					type='text'
+					placeholder={'Username'}
+					value={data.username}
+					onChange={handleInputChange}
+					icon={<BsPerson />}
+					required
+					name='username'
+					error={getErrorMsg('username', validationErrors)}
+				/>
+				<InputField
+					type='email'
+					placeholder={'Email'}
+					value={data.email}
+					onChange={handleInputChange}
+					icon={<AiOutlineMail />}
+					required
+					name='email'
+				/>
+				<InputField
+					type='password'
+					placeholder={'Password'}
+					value={data.password}
+					onChange={handleInputChange}
+					icon={<AiOutlineUnlock />}
+					required
+					name='password'
+					error={getErrorMsg('password', validationErrors)}
+				/>
+				<InputField
+					type='confirmPassword'
+					placeholder={'Confirm Password'}
+					value={data.confirmPassword}
+					onChange={handleInputChange}
+					icon={<RiLockPasswordLine />}
+					required
+					name='confirmPassword'
+					error={getErrorMsg('confirmPassword', validationErrors)}
+				/>
 
-        const isValid = validateData()
+				<Button 
+                    title={'Sign up'}  
+                    type={'submit'} 
+                    disabled={loading}
+                />
 
-        if(isValid) {
-
-            try {
-                setLoading(true)
-                const apiRes = await axios.post('http://localhost:3000/api/auth/signup', data)
-
-                if(apiRes?.data?.success) {
-                    const loginRes = await loginUser({
-                        email: data.email,
-                        password: data.password
-                    })
-                    
-                    if(loginRes && !loginRes.ok) {
-                        setSubmitError(loginRes.error || '')
-                    } else {
-                        router.push('/')
-                    }
+                {
+                    submitError &&
+                    <ErrorText>
+                        {submitError}
+                    </ErrorText>
                 }
-            } catch (error: unknown) {
-                if(error instanceof AxiosError) {
-                    const errorMsg = error.response?.data?.error
-                    setSubmitError(errorMsg)
-                }
-            }
-            setLoading(false)
-        }
-    }
 
-    return (
-			<Container>
-				<Form onSubmit={handleSignup}>
-					<FormTitle> Sign Up </FormTitle>
-					<InputField
-						type='text'
-						placeholder={'Username'}
-						value={data.username}
-						onChange={(e) => setData(e.target.value)}
-						icon={<BsPerson />}
-						required
-					/>
-					<InputField
-						type='text'
-						placeholder={'Email'}
-						value={data.email}
-						onChange={(e) => setData(e.target.value)}
-						icon={<AiOutlineMail />}
-						required
-					/>
-					<InputField
-						type='text'
-						placeholder={'Password'}
-						value={data.password}
-						onChange={(e) => setData(e.target.value)}
-						icon={<AiOutlineUnlock />}
-						required
-					/>
-					<InputField
-						type='text'
-						placeholder={'Confirm Password'}
-						value={data.confirmPassword}
-						onChange={(e) => setData(e.target.value)}
-						icon={<RiLockPasswordLine />}
-						required
-					/>
+				<InfoTextContainer>
+					<InfoText>Already have an account?</InfoText>
+					<Link href={'/login'}>Login</Link>
+				</InfoTextContainer>
+			</Form>
+		</Container>
+	);
+};
 
-                    <Button 
-                        title={'Sugn up'}
-                        type={'submit'}
-                    />
-
-                    <InfoTextContainer>
-                        <InfoText>
-                            Already have an account?
-                        </InfoText>
-                        <Link href={'/login'}>
-                            Login
-                        </Link>
-                    </InfoTextContainer>
-				</Form>
-			</Container>
-		);
-
-}
-
-export default SignupForm
+export default SignupForm;
