@@ -33,7 +33,7 @@ const Navbar = () => {
 		<Nav>
 			<IconContainer>
 				<NavLink route='/'>
-					<GiCook width={50} height={50} />
+					<GiCook size={50} />
 				</NavLink>
 			</IconContainer>
 

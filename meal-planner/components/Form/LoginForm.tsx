@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import { 
     Container,
     Form,
@@ -10,6 +11,8 @@ import {
 import InputField from './InputField';
 import { AiOutlineMail, AiOutlineUnlock } from 'react-icons/ai';
 import Button from '../Button';
+import { loginUser } from '@/helpers';
+import { AxiosError } from 'axios';
 
 type Props = {}
 
@@ -18,14 +21,36 @@ const LoginForm = (props: Props) => {
         username: '',
         password: ''
     })
+	const [loading, setLoading] = useState(false);
+	const [submitError, setSubmitError] = useState('');
+	const router = useRouter();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 			setData({ ...data, [e.target.name]: e.target.value });
 		};
 
-    const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-    }
+	const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+
+		try {
+			setLoading(true);
+
+			const loginRes = await loginUser( {username: data.username, password: data.password} );
+
+			if (loginRes && !loginRes.ok) {
+				setSubmitError(loginRes.error || '');
+			} else {
+				router.push('/');
+			}
+		} catch (error) {
+			if (error instanceof AxiosError) {
+				const errorMsg = error.response?.data?.error;
+				setSubmitError(errorMsg);
+			}
+		}
+
+		setLoading(false);
+	};
 
     return (
 			<Container>
@@ -45,7 +70,7 @@ const LoginForm = (props: Props) => {
 					<InputField
 						placeholder='Password'
 						type='password'
-						icon={<AiOutlineMail />}
+						icon={<AiOutlineUnlock />}
 						value={data.password}
 						onChange={handleInputChange}
 						required
@@ -54,7 +79,10 @@ const LoginForm = (props: Props) => {
 
 					<Link href='/forgot-password'>Forgot Password?</Link>
 
-					<Button type='submit' title='login' />
+					<Button 
+					type='submit' title='Login' 
+					disabled={loading}
+					/>
 
 					<InfoTextContainer>
 						<InfoText>New User?</InfoText>

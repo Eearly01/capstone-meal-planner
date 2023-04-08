@@ -11,14 +11,14 @@ const options : NextAuthOptions = {
             id: 'credentials',
             name: 'Credentials',
             credentials: {
-                email: {label: 'Email', type: 'text'},
+                username: {label: 'Username', type: 'text'},
                 password: {label: 'Password', type: 'text'}
             },
             async authorize(credentials) {
                 await connectToMongoDB().catch(err => {throw new Error(err)})
 
                 const user = await User.findOne({
-                    email: credentials?.email
+                    username: credentials?.username
                 }).select('+password')
 
                 if(!user) {
