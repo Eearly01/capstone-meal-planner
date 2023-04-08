@@ -25,36 +25,3 @@ export interface ButtonProps {
 	disabled?: boolean;
 	onClick?: () => void;
 }
-
-export interface Recipe {
-	id: number;
-	title: string;
-	image: string;
-	imageType: string;
-	likes: number;
-	missedIngredientCount: number;
-	usedIngredientCount: number;
-	unusedIngredients: string[];
-	likes: number;
-	nutrition: {
-		nutrients: {
-			name: string;
-			amount: number;
-			unit: string;
-		}[];
-		caloricBreakdown: {
-			percentProtein: number;
-			percentFat: number;
-			percentCarbs: number;
-		};
-	};
-}
-
-
-interface RecipeSearchResult {
-	results: Recipe[];
-	baseUri: string;
-	offset: number;
-	number: number;
-	totalResults: number;
-}

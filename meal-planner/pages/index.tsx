@@ -7,14 +7,15 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Head from 'next/head'
 import Navbar from '@/components/Navbar'
+import { RecipeSearchResult } from '@/types/recipeTypes';
 
 export default function Home() {
-  const [weatherDays, setWeatherDays] = useState([]);
+	const [recipeList, setRecipeList] = useState([]);
 	const [updated, setUpdated] = useState(false);
-	const [city, setCity] = useState({});
-	const [travelDays, setTravelDays] = useState([]);
+	const [recipe, setRecipe] = useState([]);
+	=
 
-	const callApi = () => {
+	const getRecipes = () => {
 		const axios = require('axios');
 
 		const options = {
@@ -51,49 +52,22 @@ export default function Home() {
 
 		axios
 			.request(options)
-			.then(function (response) {
-				console.log(response.data);
+			.then(function (res: RecipeSearchResult) {
+				console.log(res.data);
 			})
 			.catch(function (error) {
 				console.error(error);
 			});
 	};
 
-	const getWeather = (lat, lon) => {
-		lat
-			? axios
-					.get(`https://api.weather.gov/points/${lat},${lon}`)
-					.then((res) => {
-						axios.get(res.data.properties.forecast).then((weatherRes) => {
-							const weatherData = weatherRes.data.properties.periods;
-							setWeatherDays(weatherData);
-						});
-					})
-			: console.log('Hey');
-	};
-
 	const formSubmit = (e) => {
 		e.preventDefault();
-		getCoord(e.target.city.value, e.target.state.value);
+		getRecipes(e.target.city.value, e.target.state.value);
 		setUpdated(!updated);
 	};
 
-	const getCoord = (city, state) => {
-		axios
-			.get(
-				`https://api.tomtom.com/search/2/geocode/${city} ${state}.json?key=IvZAJEwT4tG2uDSoidDzUFkkuWgX8L5J`
-			)
-			.then((res) => {
-				setCity(res.data.results[0].address);
-				let lat = res.data.results[0].position.lat;
-				let lon = res.data.results[0].position.lon;
-				console.log(lat);
-				getWeather(lat, lon);
-			});
-	};
-
 	useEffect(() => {
-		getWeather();
+		getRecipes();
 	}, [updated]);
 
   return (
@@ -105,8 +79,8 @@ export default function Home() {
 			</Head>
 			<Container>
 				<TravelCard
-					travelDays={travelDays}
-					setTravelDays={setTravelDays}
+					recipe={recipe}
+					setRecipe={setRecipe}
 					callApi={callApi}
 				/>
 				<h1>Weather Travel Guide</h1>
@@ -116,8 +90,8 @@ export default function Home() {
 					<input type='submit' value='Submit' />
 				</form>
 				<Row>
-					{weatherDays
-						? weatherDays.map((day, i) => {
+					{recipeList
+						? recipeList.map((day, i) => {
 								if (i % 2 === 0) {
 									return (
 										<Row key={i}>
@@ -125,18 +99,18 @@ export default function Home() {
 												<DayWeather
 													day={day}
 													city={city}
-													travelDays={travelDays}
-													setTravelDays={setTravelDays}
+													recipe={recipe}
+													setRecipe={setRecipe}
 													callApi={callApi}
 												/>
 											</Col>
-											{weatherDays[i + 1] && (
+											{recipeList[i + 1] && (
 												<Col sm={6} md={4}>
 													<DayWeather
-														day={weatherDays[i + 1]}
+														day={recipeList[i + 1]}
 														city={city}
-														travelDays={travelDays}
-														setTravelDays={setTravelDays}
+														recipe={recipe}
+														setRecipe={setRecipe}
 														callApi={callApi}
 													/>
 												</Col>

@@ -13,6 +13,7 @@ import { AiOutlineMail, AiOutlineUnlock } from 'react-icons/ai';
 import Button from '../Button';
 import { loginUser } from '@/helpers';
 import { AxiosError } from 'axios';
+import { ErrorText } from './InputFieldElements';
 
 type Props = {}
 
@@ -79,10 +80,11 @@ const LoginForm = (props: Props) => {
 
 					<Link href='/forgot-password'>Forgot Password?</Link>
 
-					<Button 
-					type='submit' title='Login' 
-					disabled={loading}
-					/>
+					<Button type='submit' title='Login' disabled={loading} />
+
+					{submitError && <ErrorText>
+						{submitError}
+					</ ErrorText>}
 
 					<InfoTextContainer>
 						<InfoText>New User?</InfoText>
