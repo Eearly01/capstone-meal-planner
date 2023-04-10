@@ -1,34 +1,35 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { 
-    Container,
-    Form,
-    FormTitle,
-    InfoText,
-    InfoTextContainer,
-    Link
-} from './FormElements';
-import InputField from './InputField';
-import { AiOutlineMail, AiOutlineUnlock } from 'react-icons/ai';
-import Button from '../Button';
-import { loginUser } from '@/helpers';
 import { AxiosError } from 'axios';
+import { AiOutlineMail, AiOutlineUnlock } from 'react-icons/ai';
+import { loginUser } from '@/helpers'; 
+import AppLogoTitle from '../AppLogoTitle';
+import Button from '../Button';
+import {
+	Container,
+	Form,
+	FormTitle,
+	InfoText,
+	InfoTextContainer,
+	Link,
+} from './FormElements';
+import InputFeild from './InputField';
 import { ErrorText } from './InputFieldElements';
 
-type Props = {}
-
-const LoginForm = (props: Props) => {
-    const [data, setData] = useState({
-        username: '',
-        password: ''
-    })
+const LoginForm = () => {
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [submitError, setSubmitError] = useState('');
 	const router = useRouter();
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-			setData({ ...data, [e.target.name]: e.target.value });
-		};
+	const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setEmail(event.target.value);
+	};
+
+	const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setPassword(event.target.value);
+	};
 
 	const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -36,7 +37,7 @@ const LoginForm = (props: Props) => {
 		try {
 			setLoading(true);
 
-			const loginRes = await loginUser( {username: data.username, password: data.password} );
+			const loginRes = await loginUser({ email, password });
 
 			if (loginRes && !loginRes.ok) {
 				setSubmitError(loginRes.error || '');
@@ -53,47 +54,44 @@ const LoginForm = (props: Props) => {
 		setLoading(false);
 	};
 
-    return (
-			<Container>
-				<Form onSubmit={handleLogin}>
-					<FormTitle> Login </FormTitle>
+	return (
+		<Container>
+			<AppLogoTitle />
+			<Form onSubmit={handleLogin}>
+				<FormTitle> Login </FormTitle>
 
-					<InputField
-						placeholder='Username'
-						type='username'
-						name='username'
-						icon={<AiOutlineMail />}
-						value={data.username}
-						onChange={handleInputChange}
-						required
-					/>
+				<InputFeild
+					placeholder='Email'
+					type='email'
+					icon={<AiOutlineMail />}
+					value={email}
+					onChange={handleEmailChange}
+					required
+				/>
 
-					<InputField
-						placeholder='Password'
-						type='password'
-						icon={<AiOutlineUnlock />}
-						value={data.password}
-						onChange={handleInputChange}
-						required
-						name='password'
-					/>
+				<InputFeild
+					placeholder='Password'
+					type='password'
+					icon={<AiOutlineUnlock />}
+					value={password}
+					onChange={handlePasswordChange}
+					required
+				/>
 
-					<Link href='/forgot-password'>Forgot Password?</Link>
+				<Link href='/forgot-password'>Forgot Password?</Link>
 
-					<Button type='submit' title='Login' disabled={loading} />
+				<Button type='submit' title='Login' disabled={loading} />
 
-					{submitError && <ErrorText>
-						{submitError}
-					</ ErrorText>}
+				{submitError && <ErrorText>{submitError}</ErrorText>}
 
-					<InfoTextContainer>
-						<InfoText>New User?</InfoText>
+				<InfoTextContainer>
+					<InfoText>New User?</InfoText>
 
-						<Link href='/signup'>Create an Account</Link>
-					</InfoTextContainer>
-				</Form>
-			</Container>
-		);
-}
+					<Link href='/signup'>Create an Account</Link>
+				</InfoTextContainer>
+			</Form>
+		</Container>
+	);
+};
 
-export default LoginForm
+export default LoginForm;

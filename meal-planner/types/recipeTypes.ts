@@ -63,40 +63,35 @@
 
 
 export interface RecipeSearchResult {
-	results: {
+	results: [{
 		readyInMinutes: number;
 		sourceUrl: string;
 		image: string;
 		servings: number;
 		id: number;
 		title: string;
-	};
+    }];
 	baseUri: string;
 	offset: number;
 	number: number;
 	totalResults: number;
 }
 
-interface SearchParams {
+export interface SearchParams {
 	query?: string;
 	cuisine?: string;
-	excludeCuisine?: string;
 	diet?: string;
 	intolerances?: string;
 	equipment?: string;
 	includeIngredients?: string;
 	excludeIngredients?: string;
 	type?: string;
-	instructionsRequired?: string;
-	fillIngredients?: string;
-	addRecipeInformation?: string;
+	instructionsRequired?: boolean;
 	titleMatch?: string;
-	maxReadyTime?: string;
-	ignorePantry?: string;
+	maxReadyTime?: number;
 	sort?: string;
 	sortDirection?: string;
 	offset?: string;
 	number?: string;
-	limitLicense?: string;
 	ranking?: string;
 }

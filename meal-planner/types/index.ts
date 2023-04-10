@@ -1,15 +1,22 @@
 export interface WindowSize {
-    width: number;
-    height: number;
+	width: number;
+	height: number;
 }
 
 export interface IUser {
-    _id: string;
-    email: string;
-    username: string;
+	_id?: string;
+	email: string;
+	fullName: string;
 }
 
 export interface LoginUserParams {
-    username: string;
-    password: string;
+	email: string;
+	password: string;
+}
+
+export interface ResponseFuncs {
+	GET?: Function;
+	POST?: Function;
+	PUT?: Function;
+	DELETE?: Function;
 }

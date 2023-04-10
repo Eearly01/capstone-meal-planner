@@ -75,9 +75,16 @@ const Navbar = () => {
 						<NavLink route='/gpt' onClick={closeMenu} large color='white'>
 							Ask ChatGPT
 						</NavLink>
-						<NavLink route='/profile' onClick={closeMenu} large color='white'>
-							<BsFillPersonFill />
-						</NavLink>
+
+						{session ? (
+							<NavLink route='/profile' onClick={closeMenu} large color='white'>
+								<BsFillPersonFill />
+							</NavLink>
+						) : (
+							<NavLink route='/login' onClick={closeMenu} large color='white'>
+								Login
+							</NavLink>
+						)}
 					</MenuLinkContainer>
 				</OverlayMenu>
 			)}

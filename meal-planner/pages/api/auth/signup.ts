@@ -1,62 +1,66 @@
-import { connectToMongoDB } from '@/lib/mongodb';
-import { hash } from 'bcryptjs';
-import User from '@/models/user';
-import { NextApiRequest, NextApiResponse } from 'next';
-import { IUser } from '@/types';
-import mongoose from 'mongoose';
+import { NextApiRequest, NextApiResponse } from "next"
+import { hash } from "bcryptjs"
+import { connectToMongoDB } from "@/lib/mongodb"
+import User from "@/models/user"
+import mongoose from "mongoose"
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-	connectToMongoDB().catch((error) => res.json(error));
+    connectToMongoDB().catch(err => res.json(err))
 
-	if (req.method === 'POST') {
-		if (!req.body) return res.status(400).json({ error: 'Data is Missing' });
+    if (req.method === "POST") {
+        if (!req.body) return res.status(400).json({ error: "Data is missing" })
 
-		const { username, email, password } = req.body;
+        const { fullName, email, password } = req.body
 
-		const userExists = await User.findOne({ email });
+        const userExists = await User.findOne({ email })
 
-		if (userExists) {
-			return res.status(409).json({ error: 'User Already Exists' });
-		} else {
-			if (password.length < 6)
-				return res
-					.status(409)
-					.json({ error: 'Password should be 6 characters long' });
+        if (userExists) {
+            return res.status(409).json({ error: "User Already exists" })
+        }
+        else {
+            if (password.length < 6)
+                return res.status(409).json({ error: "Password should be 6 characters long" })
 
-			const hashedPassword = await hash(password, 12);
+            const hashedPassword = await hash(password, 12)
 
-			try {
-				const createdUser = await User.create({
-					username,
-					email,
-					password: hashedPassword,
-				});
+            try {
+                const data = await User.create({
+                    fullName,
+                    email,
+                    password: hashedPassword
+                })
 
-				const user = {
-					email: createdUser.email,
-					username: createdUser.username,
-					_id: createdUser._id,
-				};
+                console.log("data:", data)
 
-				return res.status(201).json({
-					success: true,
-					user,
-				});
-			} catch (error) {
-				if (error instanceof mongoose.Error.ValidationError) {
-					// Only return one error in the mongo array
-					for (let field in error.errors) {
-						const msg = error.errors[field].message;
-						return res.status(409).json({ error: msg });
-					}
-				}
+                const user = {
+                    email: data.email,
+                    fullName: data.fullName,
+                    _id: data._id
+                }
 
-				return res.status(500).json({ error: 'Internal Server Error' });
-			}
-		}
-	} else {
-		res.status(405).json({ error: 'Method Not Allowed' });
-	}
-};
+                return res.status(201).json({
+                    success: true,
+                    user
+                })
+            } catch (error) {
+                console.log("error:", error)
+                if (error && error instanceof mongoose.Error.ValidationError) {
+                    //mongo db will return array
+                    // but we only want to show one error at a time
 
-export default handler;
+                    for (let field in error.errors) {
+                        const msg = error.errors[field].message
+                        return res.status(409).json({ error: msg })
+                    }
+                }
+
+                return res.status(500).json({ error: "Server Error" })
+            }
+        }
+    }
+    else {
+        res.status(405).json({ error: "Method Not Allowed" })
+    }
+}
+
+export default handler
