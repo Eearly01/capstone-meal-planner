@@ -10,7 +10,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === "POST") {
         if (!req.body) return res.status(400).json({ error: "Data is missing" })
 
-        const { fullName, email, password } = req.body
+        const { fullName, username, email, password } = req.body
 
         const userExists = await User.findOne({ email })
 
@@ -27,6 +27,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 const data = await User.create({
                     fullName,
                     email,
+					username,
                     password: hashedPassword
                 })
 
@@ -35,6 +36,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 const user = {
                     email: data.email,
                     fullName: data.fullName,
+					username: data.username,
                     _id: data._id
                 }
 

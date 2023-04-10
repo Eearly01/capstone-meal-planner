@@ -6,7 +6,7 @@ type Props = {};
 const AppLogoTitle = (props: Props) => {
 	return (
 		<Container href='/'>
-			<AppTitle> OV Travels </AppTitle>
+			<AppTitle> Meal Planner </AppTitle>
 		</Container>
 	);
 };

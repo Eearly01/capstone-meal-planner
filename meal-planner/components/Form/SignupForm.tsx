@@ -22,6 +22,7 @@ import { ErrorText } from './InputFieldElements';
 const SignupForm = () => {
 	const [data, setData] = useState({
 		fullName: '',
+		username: '',
 		email: '',
 		password: '',
 		confirmPassword: '',
@@ -113,6 +114,16 @@ const SignupForm = () => {
 					placeholder={'Full Name'}
 					value={data.fullName}
 					name='fullName'
+					onChange={handleInputChange}
+					icon={<BsPerson />}
+					required
+					error={getErrorMsg('fullName', validationErrors)}
+				/>
+				<InputFeild
+					type='text'
+					placeholder={'Username'}
+					value={data.username}
+					name='username'
 					onChange={handleInputChange}
 					icon={<BsPerson />}
 					required
