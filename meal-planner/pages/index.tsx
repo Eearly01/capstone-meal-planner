@@ -21,6 +21,7 @@ export default function Home() {
 	const router = useRouter();
 
 	const getRecipes = async () => {
+		if(paramList?.query) {
 		const config = {
 			method: 'GET',
 			url: 'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/complexSearch',
@@ -40,25 +41,6 @@ export default function Home() {
 		} catch (error) {
 			console.error(error);
 		}
-	};
-
-	const getSpecificRecipe = async (id: number) => {
-		const config = {
-			method: 'GET',
-			url: `https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/${id}/information`,
-			headers: {
-				'X-RapidAPI-Key': process.env.RECIPEAPI_KEY,
-				'X-RapidAPI-Host': process.env.RECIPEAPI_HOST,
-			},
-		};
-
-		try {
-			const res = await axios(config);
-			if (res) {
-				return res.data;
-			}
-		} catch (error) {
-			console.error(error);
 		}
 	};
 
