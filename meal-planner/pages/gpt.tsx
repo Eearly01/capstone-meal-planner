@@ -1,19 +1,12 @@
-import axios from "axios";
-import React, { useState } from "react";
-import { Configuration, OpenAIApi } from "openai"
+import { Inter } from 'next/font/google';
+import ChatGPTForm from '@/components/Form/ChatGPTForm';
 
-const configuration = new Configuration({
-    organization: "YOUR_ORG_ID",
-    apiKey: process.env.OPENAI_API_KEY,
-});
+const inter = Inter({ subsets: ['latin'] });
 
-const AskChatGPT = () => {
-    const openai = new OpenAIApi(configuration);
-
-    return ( 
-			
-			""
-		);
+export default function OpenAi() {
+	return (
+		<main className={inter.className}>
+			<ChatGPTForm />
+		</main>
+	);
 }
-
-export default AskChatGPT

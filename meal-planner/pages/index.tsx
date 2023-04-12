@@ -52,7 +52,7 @@ export default function Home() {
 		console.log("thisUser::",thisUser)
 		thisUser.savedRecipes.push(recipe)
 		const apiRes = await axios.put(
-			`http://localhost:3000/api/${userId}`,
+			`http://localhost:3000/api/${userId}/update`,
 			thisUser
 		);
 		return apiRes
