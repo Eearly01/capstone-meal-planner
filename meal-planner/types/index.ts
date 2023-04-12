@@ -1,3 +1,6 @@
+import { ObjectId } from "mongoose";
+import { ShortRecipe } from "./recipeTypes";
+
 export interface WindowSize {
 	width: number;
 	height: number;
@@ -6,7 +9,16 @@ export interface WindowSize {
 export interface IUser {
 	_id?: string;
 	email: string;
-	fullName: string;
+	fullname: string;
+}
+
+export type UserProfile = {
+	_id: ObjectId;
+	email: string;
+	username: string;
+	fullname: string;
+	password: string;
+	savedRecipes: ShortRecipe[];
 }
 
 export interface LoginUserParams {

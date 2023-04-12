@@ -6,17 +6,19 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Head from 'next/head';
 import Navbar from '@/components/Navbar';
-import { RecipeSearchResult, Recipe, SearchParams } from '@/types/recipeTypes';
-import { setMaxListeners } from 'events';
-import RecipeCards from '@/components/RecipeModels/RecipeCards';
+import { RecipeSearchResult, Recipe, SearchParams, ShortRecipe } from '@/types/recipeTypes';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Button from '@/components/Button';
 import { useRouter } from 'next/router';
+import User from '@/models/user';
+import { UserProfile } from '@/types';
 
 export default function Home() {
 	const [recipeList, setRecipeList] = useState<RecipeSearchResult>();
 	const [paramList, setParamList] = useState<SearchParams>();
 	const [updated, setUpdated] = useState(false);
+	const {data: session}: any = useSession();
 
 	const router = useRouter();
 
@@ -42,6 +44,18 @@ export default function Home() {
 			console.error(error);
 		}
 		}
+	};
+
+	const updateRecipe = async (recipe: ShortRecipe) => {
+		const userId = session.user._id
+		const thisUser: UserProfile = {...session.user}
+		console.log("thisUser::",thisUser)
+		thisUser.savedRecipes.push(recipe)
+		const apiRes = await axios.put(
+			`http://localhost:3000/api/${userId}`,
+			thisUser
+		);
+		return apiRes
 	};
 
 	const formSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -91,8 +105,12 @@ export default function Home() {
 										}}
 										title='View Recipe'
 									/>
-
-									<Button title='Add to List' />
+									<Button
+										title='Add to List'
+										onClick={() => {
+											updateRecipe(recipe)
+										}}
+									/>
 								</Col>
 							</Row>
 						);

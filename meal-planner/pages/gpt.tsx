@@ -1,33 +1,19 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { Configuration, OpenAIApi } from "openai"
+
+const configuration = new Configuration({
+    organization: "YOUR_ORG_ID",
+    apiKey: process.env.OPENAI_API_KEY,
+});
 
 const AskChatGPT = () => {
-    
-    // axios.post('https://api.openai.com/v1/competions', {
-    //     prompt: '',
+    const openai = new OpenAIApi(configuration);
 
-    //     temperature: 2.0
-    // }, headers
-    // ).then(res)
-
-    const [newQuestion, setNewQuestion] = useState('');
-    const [gptArray, setGptArray] = useState([]);
-
-    // Handlers
-
-    const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
-
-    }
-
-    const handleSubmit = (e: React.FormEvent<HTMLInputElement>) => {
-        e.preventDefault();
-    }
-
-    return (
-        <>
-            Ask Away
-        </>
-    )
+    return ( 
+			
+			""
+		);
 }
 
 export default AskChatGPT

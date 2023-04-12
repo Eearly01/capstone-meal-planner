@@ -63,14 +63,7 @@
 
 
 export interface RecipeSearchResult {
-	results: [{
-		readyInMinutes: number;
-		sourceUrl: string;
-		image: string;
-		servings: number;
-		id: number;
-		title: string;
-    }];
+	results: ShortRecipe[];
 	baseUri: string;
 	offset: number;
 	number: number;
@@ -94,4 +87,11 @@ export interface SearchParams {
 	offset?: string;
 	number?: string;
 	ranking?: string;
+}
+
+export type ShortRecipe = {
+	id: number;
+	title: string;
+	image: string;
+	imageType: string;
 }

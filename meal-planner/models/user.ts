@@ -1,6 +1,7 @@
 import { Schema, model, models } from 'mongoose';
+import { UserProfile } from '@/types';
 
-const UserSchema = new Schema({
+const UserSchema = new Schema<UserProfile>({
 	email: {
 		type: String,
 		unique: true,
@@ -10,7 +11,7 @@ const UserSchema = new Schema({
 			'Invalid email address',
 		],
 	},
-	fullName: {
+	fullname: {
 		type: String,
 		required: [true, 'Full name is required'],
 		minLength: [4, 'Full name should be atleast 4 characters long'],
@@ -28,6 +29,7 @@ const UserSchema = new Schema({
 		required: [true, 'Password is required'],
 		select: false,
 	},
+	savedRecipes: []
 });
 
 const User = models.User || model('User', UserSchema);

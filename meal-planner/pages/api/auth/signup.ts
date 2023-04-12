@@ -3,6 +3,7 @@ import { hash } from "bcryptjs"
 import { connectToMongoDB } from "@/lib/mongodb"
 import User from "@/models/user"
 import mongoose from "mongoose"
+import RecipeCards from "@/components/RecipeModels/RecipeCards"
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     connectToMongoDB().catch(err => res.json(err))
@@ -10,7 +11,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === "POST") {
         if (!req.body) return res.status(400).json({ error: "Data is missing" })
 
-        const { fullName, username, email, password } = req.body
+        const { fullname, username, email, password, savedRecipes } = req.body
 
         const userExists = await User.findOne({ email })
 
@@ -25,19 +26,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
             try {
                 const data = await User.create({
-                    fullName,
+                    fullname,
                     email,
 					username,
-                    password: hashedPassword
+                    password: hashedPassword,
+                    savedRecipes
                 })
 
                 console.log("data:", data)
 
                 const user = {
                     email: data.email,
-                    fullName: data.fullName,
+                    fullname: data.fullname,
 					username: data.username,
-                    _id: data._id
+                    _id: data._id,
+                    savedRecipes: data.savedRecipes
                 }
 
                 return res.status(201).json({

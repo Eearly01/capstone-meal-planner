@@ -21,7 +21,7 @@ import { ErrorText } from './InputFieldElements';
 
 const SignupForm = () => {
 	const [data, setData] = useState({
-		fullName: '',
+		fullname: '',
 		username: '',
 		email: '',
 		password: '',
@@ -36,10 +36,10 @@ const SignupForm = () => {
 	const validateData = (): boolean => {
 		const err = [];
 
-		if (data.fullName?.length < 4) {
-			err.push({ fullName: 'Full name must be atleast 4 characters long' });
-		} else if (data.fullName?.length > 30) {
-			err.push({ fullName: 'Full name should be less than 30 characters' });
+		if (data.fullname?.length < 4) {
+			err.push({ fullname: 'Full name must be atleast 4 characters long' });
+		} else if (data.fullname?.length > 30) {
+			err.push({ fullname: 'Full name should be less than 30 characters' });
 		} else if (data.password?.length < 6) {
 			err.push({ password: 'Password should be atleast 6 characters long' });
 		} else if (data.password !== data.confirmPassword) {
@@ -62,12 +62,12 @@ const SignupForm = () => {
 
 		if (isValid) {
 			// sign up
-
+			const savedRecipes: any = []
 			try {
 				setLoading(true);
 				const apiRes = await axios.post(
 					'http://localhost:3000/api/auth/signup',
-					data
+					{...data, savedRecipes}
 				);
 
 				if (apiRes?.data?.success) {
@@ -112,12 +112,12 @@ const SignupForm = () => {
 				<InputFeild
 					type='text'
 					placeholder={'Full Name'}
-					value={data.fullName}
-					name='fullName'
+					value={data.fullname}
+					name='fullname'
 					onChange={handleInputChange}
 					icon={<BsPerson />}
 					required
-					error={getErrorMsg('fullName', validationErrors)}
+					error={getErrorMsg('fullname', validationErrors)}
 				/>
 				<InputFeild
 					type='text'
@@ -127,7 +127,7 @@ const SignupForm = () => {
 					onChange={handleInputChange}
 					icon={<BsPerson />}
 					required
-					error={getErrorMsg('fullName', validationErrors)}
+					error={getErrorMsg('fullname', validationErrors)}
 				/>
 				<InputFeild
 					type='email'
