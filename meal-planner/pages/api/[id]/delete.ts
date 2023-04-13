@@ -4,16 +4,17 @@ import User from '@/models/user';
 import mongoose from 'mongoose';
 import { signOut } from 'next-auth/react';
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
 	connectToMongoDB().catch((err) => res.json(err));
-
+	console.log('hello')
+	console.log(req.body)
 	if (req.method === 'DELETE') {
 		if (!req.body) return res.status(400).json({ error: 'Data is missing' });
 
 		const { _id } = req.body;
-        signOut
-
+		console.log(_id)
 		try {
+			console.log(_id)
 			await User.findByIdAndDelete(_id);
 
 			return res.status(200).json({
@@ -39,4 +40,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 	}
 };
 
-export default handler;
+export default Handler;

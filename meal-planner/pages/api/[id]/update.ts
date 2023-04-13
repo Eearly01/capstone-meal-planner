@@ -3,9 +3,11 @@ import { connectToMongoDB } from '@/lib/mongodb';
 import User from '@/models/user';
 import mongoose from 'mongoose';
 import { UserProfile } from '@/types';
+import { useSession } from 'next-auth/react';
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
 	connectToMongoDB().catch((err) => res.json(err));
+	//const { data: session, update }: any = useSession();
 
 	if (req.method === 'PUT') {
 		if (!req.body) return res.status(400).json({ error: 'Data is missing' });
@@ -20,7 +22,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 					password,
                     savedRecipes
 				});
-
 				console.log('data:', data);
 
 				const user: UserProfile = {
@@ -55,4 +56,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 	}
 };
 
-export default handler;
+export default Handler;

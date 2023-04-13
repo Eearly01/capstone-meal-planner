@@ -3,10 +3,10 @@ import { hash } from "bcryptjs"
 import { connectToMongoDB } from "@/lib/mongodb"
 import User from "@/models/user"
 import mongoose from "mongoose"
-import RecipeCards from "@/components/RecipeModels/RecipeCards"
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
     connectToMongoDB().catch(err => res.json(err))
+    
 
     if (req.method === "POST") {
         if (!req.body) return res.status(400).json({ error: "Data is missing" })
@@ -68,4 +68,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 }
 
-export default handler
+export default Handler

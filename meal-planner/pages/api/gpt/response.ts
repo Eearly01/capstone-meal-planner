@@ -19,10 +19,9 @@ export default async function handler(request: Request) {
 	}
 
 	const payload: OpenAIStreamPayload = {
-		model: 'gpt-3.5-turbo',
-		// model: `${currentModel}`,
+		model: `${currentModel}`,
 		messages: [{ role: 'user', content: message }],
-		temperature: 0.7,
+		temperature: 1,
 		top_p: 1,
 		frequency_penalty: 0,
 		presence_penalty: 0,

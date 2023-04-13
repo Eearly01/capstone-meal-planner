@@ -9,11 +9,16 @@ const UserProfile = () => {
 
 	const deleteUser = async () => {
 		const userId = session.user._id;
-		const apiRes = await axios.put(
+		console.log(userId)
+		try {
+			await axios.delete(
 			`http://localhost:3000/api/${userId}/delete`,
-			userId
+			{data: {_id: userId}}
 		);
-		return apiRes;
+		return signOut();
+			} catch (error) {
+				console.log('Error deleting user:: ', error)
+			}
 	};
 
 	return (
