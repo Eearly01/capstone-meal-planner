@@ -39,10 +39,11 @@ const PersonalPage = () => {
 					}
 				));
 			session.user = thisUser;
-			return await axios.put(
+			await axios.put(
 				`https://meal-planner-kd70.onrender.com/api/${userId}/update`,
 				thisUser
 			);
+			return setUpdated(!updated)
 		} else {
 			router.push('/login');
 		}
