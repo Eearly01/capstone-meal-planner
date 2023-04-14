@@ -13,9 +13,6 @@ const nextConfig = {
 	images: {
 		domains: ['spoonacular.com'],
 	},
-	externals: {
-		'abortcontroller-polyfill/dist/cjs-ponyfill': 'AbortController',
-	},
 };
 
 module.exports = nextConfig
