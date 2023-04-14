@@ -12,7 +12,7 @@ const UserProfile = () => {
 		console.log(userId);
 		try {
 			await axios.delete(
-				`http://meal-planner-kd70.onrender.com/api/${userId}/delete`,
+				`https://meal-planner-kd70.onrender.com/api/${userId}/delete`,
 				{ data: { _id: userId } }
 			);
 			return signOut();

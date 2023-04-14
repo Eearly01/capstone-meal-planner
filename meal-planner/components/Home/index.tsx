@@ -48,7 +48,7 @@ export default function Home() {
 		thisUser.savedRecipes.push(recipe);
 		session.user = thisUser;
 		return await axios.put(
-			`http://meal-planner-kd70.onrender.com/api/${userId}/update`,
+			`https://meal-planner-kd70.onrender.com/api/${userId}/update`,
 			thisUser
 		);
 	};
@@ -79,15 +79,20 @@ export default function Home() {
 					<form onSubmit={formSubmit}>
 						Search:{' '}
 						<input type='text' name='query' onChange={handleInputChange} />
-						<EthButton text={'Submit'} label={'Button'} onClick={() => {<input type='submit' value='Submit' />;}} />
-						
+						<EthButton
+							text={'Submit'}
+							label={'Button'}
+							onClick={() => {
+								<input type='submit' value='Submit' />;
+							}}
+						/>
 					</form>
 				</SearchBar>
 			</Container>
-			<RecipeCard 
-			recipeList={recipeList} 
-			updateRecipe={updateRecipe}
-			buttonTitle='Add To List' 
+			<RecipeCard
+				recipeList={recipeList}
+				updateRecipe={updateRecipe}
+				buttonTitle='Add To List'
 			/>
 		</>
 	);

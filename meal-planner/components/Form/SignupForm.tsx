@@ -62,11 +62,11 @@ const SignupForm = () => {
 
 		if (isValid) {
 			// sign up
-			const savedRecipes: any = []
+			const savedRecipes: any = [];
 			try {
 				setLoading(true);
 				const apiRes = await axios.post(
-					'http://meal-planner-kd70.onrender.com/api/auth/signup',
+					'https://meal-planner-kd70.onrender.com/api/auth/signup',
 					{ ...data, savedRecipes }
 				);
 

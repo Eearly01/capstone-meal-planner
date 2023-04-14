@@ -38,7 +38,7 @@ export default function ViewRecipe(id: any) {
 			thisUser.savedRecipes.push(recipe);
 			session.user = thisUser;
 			return await axios.put(
-				`http://meal-planner-kd70.onrender.com/api/${userId}/update`,
+				`https://meal-planner-kd70.onrender.com/api/${userId}/update`,
 				thisUser
 			);
 		} else {
