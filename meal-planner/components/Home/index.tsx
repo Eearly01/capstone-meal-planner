@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios, { AxiosError, AxiosResponse } from 'axios';
-// Bootstrap Components
-import Container from 'react-bootstrap/Container';
 import Navbar from '@/components/Navbar';
 import {
 	RecipeSearchResult,
@@ -11,15 +9,15 @@ import {
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { UserProfile } from '@/types';
-import RecipeCard from '../RecipeModels';
+import RecipeCard from './RecipeCard';
+import { Container, SearchBar } from './HomeElements';
+import { EthButton } from '../Button/EthButton';
 
 export default function Home() {
 	const [recipeList, setRecipeList] = useState<RecipeSearchResult>();
 	const [paramList, setParamList] = useState<SearchParams>();
 	const [updated, setUpdated] = useState(false);
 	const { data: session, update }: any = useSession();
-
-	const router = useRouter();
 
 	const getRecipes = async () => {
 		if (paramList?.query) {
@@ -78,18 +76,17 @@ export default function Home() {
 
 	return (
 		<>
-			
 			<Container>
-				<form onSubmit={formSubmit}>
-					Search:{' '}
-					<input type='text' name='query' onChange={handleInputChange} />
-					<input type='submit' value='Submit' />
-				</form>
-				<RecipeCard 
-				recipeList = {recipeList}
-				updateRecipe = {updateRecipe}
-				/>
+				<SearchBar>
+					<form onSubmit={formSubmit}>
+						Search:{' '}
+						<input type='text' name='query' onChange={handleInputChange} />
+						<EthButton text={'Submit'} label={'Button'} onClick={() => {<input type='submit' value='Submit' />;}} />
+						
+					</form>
+				</SearchBar>
 			</Container>
+			<RecipeCard recipeList={recipeList} updateRecipe={updateRecipe} />
 		</>
 	);
 }

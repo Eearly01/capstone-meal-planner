@@ -14,10 +14,10 @@ const RecipeCard = ({ recipeList, updateRecipe }: Props) => {
 	const router = useRouter();
 
 	return (
-		<>
+		<Container>
 			{recipeList?.results.map((recipe, i) => {
 				return (
-					<>
+					<Card key={i}>
 						{recipe.title}
 						<Image
 							src={recipe.image}
@@ -38,10 +38,10 @@ const RecipeCard = ({ recipeList, updateRecipe }: Props) => {
 								updateRecipe(recipe);
 							}}
 						/>
-					</>
+					</Card>
 				);
 			})}
-		</>
+		</Container>
 	);
 };
 

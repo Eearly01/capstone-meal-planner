@@ -1,12 +1,33 @@
-import { Configuration, OpenAIApi } from 'openai';
+import axios from 'axios';
+import { NextApiRequest, NextApiResponse } from 'next';
 
-const configuration = new Configuration({
-	apiKey: process.env.OPENAI_API_KEY,
-});
+const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
+	const { question } = req.body;
+	console.log(question);
 
-const openai = new OpenAIApi(configuration);
+	const headers = {
+		headers: { Authorization: 'Bearer ' + process.env.OPENAI_API_KEY },
+	};
 
-export async function GET(request: Request) {
-	const response = await openai.listModels();
-	return new Response(JSON.stringify(response.data));
-}
+	axios
+		.post(
+			'https://api.openai.com/v1/completions',
+			{
+				prompt: `${question}`,
+				model: 'text-davinci-003',
+				max_tokens: 50,
+				temperature: 1.0,
+			},
+			headers
+		)
+		.then((response: any) => {
+			const answer = response.data.choices[0].text;
+			res.send(answer); // send the answer back to the client
+		})
+		.catch((error: any) => {
+			console.error(error);
+			res.status(500).send('Something went wrong'); // send an error response if there was an error
+		});
+};
+
+export default Handler;
