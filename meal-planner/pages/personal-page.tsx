@@ -54,7 +54,7 @@ const PersonalPage = () => {
 		window.addEventListener('visibilitychange', visibilityHandler, false);
 		return () =>
 			window.removeEventListener('visibilitychange', visibilityHandler, false);
-	}, [update, updated]);
+	}, [update, updated, session]);
 
 
 	return (
