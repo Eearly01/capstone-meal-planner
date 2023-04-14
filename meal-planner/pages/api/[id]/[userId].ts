@@ -14,8 +14,6 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
 		try {
 			const data = await User.findById(userId);
-			console.log('data:', data);
-
 			const user: UserProfile = {
 				_id: data._id,
 				email: data.email,

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Recipe, ShortRecipe } from '@/types/recipeTypes';
-import Image from 'next/image';
-import Button from '@/components/Button';
 import { useRouter } from 'next/router';
 import { UserProfile } from '@/types';
 import { useSession } from 'next-auth/react';
@@ -37,7 +35,6 @@ export default function ViewRecipe(id: any) {
 		if (session) {
 			const userId = session?.user?._id;
 			const thisUser: UserProfile = { ...session.user };
-			console.log('thisUser::', thisUser);
 			thisUser.savedRecipes.push(recipe);
 			session.user = thisUser;
 			return await axios.put(

@@ -26,3 +26,11 @@ export const Card = styled.div`
         
     }
 `;
+
+export const ImageStyle = styled.span`
+	margin: 10px;
+	border: 2px solid lightgray;
+    position: fixed;
+	width: 100px;
+	height: 100px;
+`;

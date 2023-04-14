@@ -1,30 +1,30 @@
 import React from 'react';
-import { Card, Container } from './RecipeElements';
+import { Card, Container, ImageStyle } from './RecipeElements';
 import Image from 'next/image';
-import { RecipeSearchResult } from '@/types/recipeTypes';
+import { RecipeSearchResult, ShortRecipe } from '@/types/recipeTypes';
 import Button from '../Button';
 import { useRouter } from 'next/router';
 
-type Props = {
-	recipeList?: RecipeSearchResult;
+type Props = {  
+	recipeList?: ShortRecipe[];
 	updateRecipe: any;
+	buttonTitle: string;
 };
 
-const RecipeCard = ({ recipeList, updateRecipe }: Props) => {
+const RecipeCard = ({ recipeList, updateRecipe, buttonTitle }: Props) => {
 	const router = useRouter();
-
 	return (
 		<Container>
-			{recipeList?.results.map((recipe, i) => {
+			{recipeList?.map((recipe, i) => {
 				return (
 					<Card key={i}>
 						{recipe.title}
-						<Image
-							src={recipe.image}
-							width={50}
-							alt='This Recipe has no Image'
-							height={50}
-						/>
+							<Image
+								src={recipe.image}
+								height={100}
+								width={100}
+								alt='This Recipe has no Image'
+							/>
 						<Button
 							onClick={() => {
 								// Navigate to recipe page when button is clicked
@@ -33,7 +33,7 @@ const RecipeCard = ({ recipeList, updateRecipe }: Props) => {
 							title='View Recipe'
 						/>
 						<Button
-							title='Add to List'
+							title={buttonTitle}
 							onClick={() => {
 								updateRecipe(recipe);
 							}}

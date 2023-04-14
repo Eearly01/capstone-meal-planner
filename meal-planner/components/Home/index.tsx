@@ -14,7 +14,7 @@ import { Container, SearchBar } from './HomeElements';
 import { EthButton } from '../Button/EthButton';
 
 export default function Home() {
-	const [recipeList, setRecipeList] = useState<RecipeSearchResult>();
+	const [recipeList, setRecipeList] = useState<ShortRecipe[]>();
 	const [paramList, setParamList] = useState<SearchParams>();
 	const [updated, setUpdated] = useState(false);
 	const { data: session, update }: any = useSession();
@@ -34,8 +34,7 @@ export default function Home() {
 			try {
 				const res = await axios(config);
 				if (res) {
-					setRecipeList(res.data);
-					console.log(recipeList);
+					setRecipeList(res.data.results);
 				}
 			} catch (error) {
 				console.error(error);
@@ -46,7 +45,6 @@ export default function Home() {
 	const updateRecipe = async (recipe: ShortRecipe) => {
 		const userId = session.user._id;
 		const thisUser: UserProfile = { ...session.user };
-		console.log('thisUser::', thisUser);
 		thisUser.savedRecipes.push(recipe);
 		session.user = thisUser;
 		return await axios.put(
@@ -86,7 +84,11 @@ export default function Home() {
 					</form>
 				</SearchBar>
 			</Container>
-			<RecipeCard recipeList={recipeList} updateRecipe={updateRecipe} />
+			<RecipeCard 
+			recipeList={recipeList} 
+			updateRecipe={updateRecipe}
+			buttonTitle='Add To List' 
+			/>
 		</>
 	);
 }
