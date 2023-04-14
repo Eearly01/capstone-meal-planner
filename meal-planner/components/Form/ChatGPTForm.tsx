@@ -21,10 +21,12 @@ const ChatGPTForm = () => {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		console.log(newQuestion)
 		e.preventDefault();
-		const apiResponse: any = await axios
-			.post('http://localhost:3000/api/gpt/models/route', {
+		const apiResponse: any = await axios.post(
+			'https://meal-planner-kd70.onrender.com/api/gpt/models/route',
+			{
 				question: newQuestion,
-			})
+			}
+		);
 		console.log(apiResponse.data)
 		setGptAnswer(apiResponse.data)
 	};

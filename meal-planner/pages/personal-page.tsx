@@ -12,7 +12,7 @@ import RecipeCard from '@/components/Home/RecipeCard';
 
 const PersonalPage = () => {
 	const { data: session, update }: any = useSession();
-	
+
 	const [updated, setUpdated] = useState(false);
 	const router = useRouter();
 	const [user, setUser] = useState<UserProfile>();
@@ -20,7 +20,7 @@ const PersonalPage = () => {
 	const getUser = async (userId: number) => {
 		try {
 			const response = await axios.get(
-				`http://localhost:3000/api/${userId}/${userId}`
+				`http://meal-planner-kd70.onrender.com/api/${userId}/${userId}`
 			);
 			setUser(response.data.user);
 		} catch (error) {
@@ -31,21 +31,22 @@ const PersonalPage = () => {
 	const deleteRecipe = async (recipe: ShortRecipe) => {
 		if (session) {
 			const userId = session.user._id;
-		const thisUser: UserProfile = { ...session.user };
-		user && (
-			thisUser.savedRecipes = user?.savedRecipes.filter((rcp: ShortRecipe) => {
-					return rcp.id !== recipe.id;
-			})
-		)
-		session.user = thisUser;
-		return await axios.put(
-			`http://localhost:3000/api/${userId}/update`,
-			thisUser
-		);
+			const thisUser: UserProfile = { ...session.user };
+			user &&
+				(thisUser.savedRecipes = user?.savedRecipes.filter(
+					(rcp: ShortRecipe) => {
+						return rcp.id !== recipe.id;
+					}
+				));
+			session.user = thisUser;
+			return await axios.put(
+				`http://meal-planner-kd70.onrender.com/api/${userId}/update`,
+				thisUser
+			);
 		} else {
 			router.push('/login');
 		}
-	}
+	};
 
 	useEffect(() => {
 		getUser(session?.user._id);
@@ -56,22 +57,20 @@ const PersonalPage = () => {
 			window.removeEventListener('visibilitychange', visibilityHandler, false);
 	}, [update, updated, session]);
 
-
 	return (
 		<>
-		<h1>
-			Personal Recipe List
-		</h1>
-		{session && (
-			<>
-				<RecipeCard recipeList={user?.savedRecipes}
-				updateRecipe={deleteRecipe}
-				buttonTitle='DELETE Recipe'
-				/>
-			</>
-		)}
+			<h1>Personal Recipe List</h1>
+			{session && (
+				<>
+					<RecipeCard
+						recipeList={user?.savedRecipes}
+						updateRecipe={deleteRecipe}
+						buttonTitle='DELETE Recipe'
+					/>
+				</>
+			)}
 		</>
 	);
 };
 
-export default PersonalPage
+export default PersonalPage;

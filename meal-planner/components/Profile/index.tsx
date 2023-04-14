@@ -9,16 +9,16 @@ const UserProfile = () => {
 
 	const deleteUser = async () => {
 		const userId = session.user._id;
-		console.log(userId)
+		console.log(userId);
 		try {
 			await axios.delete(
-			`http://localhost:3000/api/${userId}/delete`,
-			{data: {_id: userId}}
-		);
-		return signOut();
-			} catch (error) {
-				console.log('Error deleting user:: ', error)
-			}
+				`http://meal-planner-kd70.onrender.com/api/${userId}/delete`,
+				{ data: { _id: userId } }
+			);
+			return signOut();
+		} catch (error) {
+			console.log('Error deleting user:: ', error);
+		}
 	};
 
 	return (
@@ -30,10 +30,7 @@ const UserProfile = () => {
 						<UserEmail>{session?.user?.email}</UserEmail>
 
 						<Button title='Logout' onClick={signOut} />
-						<Button
-							title='DELETE User'
-							onClick={deleteUser}
-						/>
+						<Button title='DELETE User' onClick={deleteUser} />
 					</>
 				)}
 			</Wrapper>

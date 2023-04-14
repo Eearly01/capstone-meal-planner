@@ -66,8 +66,8 @@ const SignupForm = () => {
 			try {
 				setLoading(true);
 				const apiRes = await axios.post(
-					'http://localhost:3000/api/auth/signup',
-					{...data, savedRecipes}
+					'http://meal-planner-kd70.onrender.com/api/auth/signup',
+					{ ...data, savedRecipes }
 				);
 
 				if (apiRes?.data?.success) {
