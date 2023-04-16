@@ -21,8 +21,11 @@ export default function Home() {
 	const { data: session, update }: any = useSession();
 	const [pageNumber, setPageNumber] = useState(14)
 
+	let disabled = true;
+
 	const getRecipes = async () => {
 		if (paramList?.query) {
+			disabled = false;
 			const config = {
 				method: 'GET',
 				url: 'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/complexSearch',
@@ -99,14 +102,18 @@ export default function Home() {
 			<div>
 				<Button
 					title='Next Page'
+					disabled = {disabled}
 					onClick={() => {
 						setPageNumber(pageNumber + 14);
+						console.log(pageNumber)
 					}}
 				/>
 				<Button
 					title='Home Page'
+					disabled = {disabled}
 					onClick={() => {
 						setPageNumber(14);
+						console.log(pageNumber)
 					}}
 				/>
 			</div>
