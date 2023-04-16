@@ -19,8 +19,7 @@ export default function Home() {
 	const [paramList, setParamList] = useState<SearchParams>();
 	const [updated, setUpdated] = useState(false);
 	const { data: session, update }: any = useSession();
-
-	let pageNumber = 14;
+	const [pageNumber, setPageNumber] = useState(14)
 
 	const getRecipes = async () => {
 		if (paramList?.query) {
@@ -97,13 +96,20 @@ export default function Home() {
 				updateRecipe={updateRecipe}
 				buttonTitle='Add To List'
 			/>
-			<Button
-				title='Next Page'
-				onClick={() => {
-					pageNumber += 14
-					getRecipes
-				}}
-			/>
+			<div>
+				<Button
+					title='Next Page'
+					onClick={() => {
+						setPageNumber(pageNumber + 14);
+					}}
+				/>
+				<Button
+					title='Home Page'
+					onClick={() => {
+						setPageNumber(14);
+					}}
+				/>
+			</div>
 		</>
 	);
 }
