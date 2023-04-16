@@ -99,7 +99,7 @@ export default function Home() {
 				updateRecipe={updateRecipe}
 				buttonTitle='Add To List'
 			/>
-			<div>
+			{/* <div>
 				<Button
 					title='Next Page'
 					disabled = {disabled}
@@ -116,7 +116,7 @@ export default function Home() {
 						console.log(pageNumber)
 					}}
 				/>
-			</div>
+			</div> */}
 		</>
 	);
 }
