@@ -12,12 +12,15 @@ import { UserProfile } from '@/types';
 import RecipeCard from './RecipeCard';
 import { Container, SearchBar } from './HomeElements';
 import { EthButton } from '../Button/EthButton';
+import Button from '../Button';
 
 export default function Home() {
 	const [recipeList, setRecipeList] = useState<ShortRecipe[]>();
 	const [paramList, setParamList] = useState<SearchParams>();
 	const [updated, setUpdated] = useState(false);
 	const { data: session, update }: any = useSession();
+
+	let pageNumber = 14;
 
 	const getRecipes = async () => {
 		if (paramList?.query) {
@@ -60,7 +63,7 @@ export default function Home() {
 	};
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setParamList({ ...paramList, [e.target.name]: e.target.value });
+		setParamList({ ...paramList, [e.target.name]: e.target.value, number: pageNumber });
 		console.log(paramList);
 	};
 
@@ -93,6 +96,13 @@ export default function Home() {
 				recipeList={recipeList}
 				updateRecipe={updateRecipe}
 				buttonTitle='Add To List'
+			/>
+			<Button
+				title='Next Page'
+				onClick={() => {
+					pageNumber += 14
+					getRecipes
+				}}
 			/>
 		</>
 	);

@@ -85,7 +85,7 @@ export interface SearchParams {
 	sort?: string;
 	sortDirection?: string;
 	offset?: string;
-	number?: string;
+	number?: number;
 	ranking?: string;
 }
 
