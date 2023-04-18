@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios from 'axios';
 import Navbar from '@/components/Navbar';
 import {
-	RecipeSearchResult,
 	SearchParams,
 	ShortRecipe,
 } from '@/types/recipeTypes';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
 import { UserProfile } from '@/types';
 import RecipeCard from './RecipeCard';
-import { Container, SearchBar } from './HomeElements';
+import { Container, SearchBar, PageButtons } from './HomeElements';
 import { EthButton } from '../Button/EthButton';
 import Button from '../Button';
 
@@ -19,33 +17,34 @@ export default function Home() {
 	const [paramList, setParamList] = useState<SearchParams>();
 	const [updated, setUpdated] = useState(false);
 	const { data: session, update }: any = useSession();
-	const [pageNumber, setPageNumber] = useState(14)
+	const [pageOffset, setPageOffset] = useState(0);
+	const [disabled, setDisabled] = useState(true);
 
-	let disabled = true;
+const getRecipes = async () => {
+	if (paramList?.query) {
+		const config = {
+			method: 'GET',
+			url: 'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/complexSearch',
+			params: { ...paramList, number: 12, offset: pageOffset },
+			headers: {
+				'X-RapidAPI-Key': process.env.RECIPEAPI_KEY,
+				'X-RapidAPI-Host': process.env.RECIPEAPI_HOST,
+			},
+		};
 
-	const getRecipes = async () => {
-		if (paramList?.query) {
-			disabled = false;
-			const config = {
-				method: 'GET',
-				url: 'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/complexSearch',
-				params: paramList,
-				headers: {
-					'X-RapidAPI-Key': process.env.RECIPEAPI_KEY,
-					'X-RapidAPI-Host': process.env.RECIPEAPI_HOST,
-				},
-			};
-
-			try {
-				const res = await axios(config);
-				if (res) {
-					setRecipeList(res.data.results);
-				}
-			} catch (error) {
-				console.error(error);
+		try {
+			const res = await axios(config);
+			if (res) {
+				setRecipeList(res.data.results);
+				setDisabled(false);
 			}
+		} catch (error) {
+			console.error(error);
 		}
-	};
+	}
+};
+
+
 
 	const updateRecipe = async (recipe: ShortRecipe) => {
 		const userId = session.user._id;
@@ -53,7 +52,7 @@ export default function Home() {
 		thisUser.savedRecipes.push(recipe);
 		session.user = thisUser;
 		return await axios.put(
-			`https://meal-planner-kd70.onrender.com/api/${userId}/update`,
+			`${process.env.SERVER}/api/${userId}/update`,
 			thisUser
 		);
 	};
@@ -65,17 +64,19 @@ export default function Home() {
 	};
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setParamList({ ...paramList, [e.target.name]: e.target.value, number: pageNumber });
+		setParamList({
+			...paramList,
+			[e.target.name]: e.target.value,
+			offset: 0,
+		});
 		console.log(paramList);
 	};
 
-	useEffect(() => {
-		const visibilityHandler = () =>
-			document.visibilityState === 'visible' && update();
-		window.addEventListener('visibilitychange', visibilityHandler, false);
-		return () =>
-			window.removeEventListener('visibilitychange', visibilityHandler, false);
-	}, [update]);
+useEffect(() => {
+	getRecipes();
+}, [pageOffset, updated]);
+
+
 
 	return (
 		<>
@@ -99,24 +100,41 @@ export default function Home() {
 				updateRecipe={updateRecipe}
 				buttonTitle='Add To List'
 			/>
-			{/* <div>
+			<PageButtons disabled={disabled}>
 				<Button
 					title='Next Page'
-					disabled = {disabled}
-					onClick={() => {
-						setPageNumber(pageNumber + 14);
-						console.log(pageNumber)
+					disabled={disabled}
+					onClick={async () => {
+						setPageOffset(
+							(prevOffset) => prevOffset + (paramList?.offset || 12)
+						);
+						await getRecipes();
+						setUpdated(!updated);
 					}}
 				/>
+
+				<Button
+					title='Prev Page'
+					disabled={disabled}
+					onClick={async () => {
+						setPageOffset(
+							(prevOffset) => prevOffset - (paramList?.offset || 12)
+						);
+						await getRecipes();
+						setUpdated(!updated);
+					}}
+				/>
+
 				<Button
 					title='Home Page'
-					disabled = {disabled}
-					onClick={() => {
-						setPageNumber(14);
-						console.log(pageNumber)
+					disabled={disabled}
+					onClick={async () => {
+						setPageOffset(0);
+						await getRecipes();
+						setUpdated(!updated);
 					}}
 				/>
-			</div> */}
+			</PageButtons>
 		</>
 	);
 }

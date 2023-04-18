@@ -11,10 +11,9 @@ const UserProfile = () => {
 		const userId = session.user._id;
 		console.log(userId);
 		try {
-			await axios.delete(
-				`https://meal-planner-kd70.onrender.com/api/${userId}/delete`,
-				{ data: { _id: userId } }
-			);
+			await axios.delete(`${process.env.SERVER}/api/${userId}/delete`, {
+				data: { _id: userId },
+			});
 			return signOut();
 		} catch (error) {
 			console.log('Error deleting user:: ', error);

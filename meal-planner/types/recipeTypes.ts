@@ -84,7 +84,7 @@ export interface SearchParams {
 	maxReadyTime?: number;
 	sort?: string;
 	sortDirection?: string;
-	offset?: string;
+	offset?: number;
 	number?: number;
 	ranking?: string;
 }

@@ -66,7 +66,7 @@ const SignupForm = () => {
 			try {
 				setLoading(true);
 				const apiRes = await axios.post(
-					'https://meal-planner-kd70.onrender.com/api/auth/signup',
+					`${process.env.SERVER}/api/auth/signup`,
 					{ ...data, savedRecipes }
 				);
 

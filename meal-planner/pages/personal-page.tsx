@@ -20,7 +20,7 @@ const PersonalPage = () => {
 	const getUser = async (userId: number) => {
 		try {
 			const response = await axios.get(
-				`https://meal-planner-kd70.onrender.com/api/${userId}/${userId}`
+				`/api/${userId}/${userId}`
 			);
 			setUser(response.data.user);
 		} catch (error) {
@@ -39,11 +39,8 @@ const PersonalPage = () => {
 					}
 				));
 			session.user = thisUser;
-			await axios.put(
-				`https://meal-planner-kd70.onrender.com/api/${userId}/update`,
-				thisUser
-			);
-			return setUpdated(!updated)
+			await axios.put(`${process.env.SERVER}/api/${userId}/update`, thisUser);
+			return setUpdated(!updated);
 		} else {
 			router.push('/login');
 		}

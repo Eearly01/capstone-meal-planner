@@ -1,5 +1,5 @@
 import { Inter } from 'next/font/google';
-import ChatGPTForm from '@/components/Form/ChatGPTForm';
+import ChatGPTForm from '@/components/ChatGPTForm/ChatGPTForm';
 
 const inter = Inter({ subsets: ['latin'] });
 

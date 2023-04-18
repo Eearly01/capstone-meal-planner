@@ -34,3 +34,12 @@ export const Container = styled.div`
     align-items: center;
 
 `
+
+interface PgButtonProps {
+	disabled: boolean;
+}
+
+export const PageButtons = styled.div<PgButtonProps>`
+	display: ${(props) => (props.disabled ? 'none' : 'flex')};
+	justify-content: space-around;
+`;
