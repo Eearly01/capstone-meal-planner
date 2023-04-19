@@ -33,7 +33,18 @@ export const Content = styled.section`
 `;
 
 export const ChatInputHolder = styled.div`
+	display: flex;
 	margin-bottom: 1rem;
+	justify-content: flex-end;
+	align-items: center;
+	Button {
+		width: 20%;
+		padding: 8px;
+		margin-left: 1.2rem;
+	}
+	form {
+		width: 80%;
+	}
 `;
 
 export const ChatInput = styled.input`

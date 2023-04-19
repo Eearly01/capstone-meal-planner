@@ -56,11 +56,16 @@ const ChatGPTForm = () => {
 			<Content>
 				<ChatInputHolder>
 					<form onSubmit={handleSubmit}>
-						<ChatInput onChange={handleChange} placeholder='Ask any Question' />
+						<ChatInput onChange={handleChange} placeholder='What is a good dish for summer?' />
 					</form>
+					<Button
+						title='Submit'
+						type='submit' 
+						disabled={isLoading}
+					/>
 				</ChatInputHolder>
 				<Button
-					title='Give Me a Dish!'
+					title='Give Me Random a Dish!'
 					disabled={isLoading}
 					onClick={() => handleSubmit(null, 'please give me a dish')}
 				/>

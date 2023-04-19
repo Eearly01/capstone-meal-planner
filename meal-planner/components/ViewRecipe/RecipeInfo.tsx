@@ -1,46 +1,50 @@
-import { Recipe } from '@/types/recipeTypes';
+import { Recipe, ShortRecipe } from '@/types/recipeTypes';
 import React from 'react';
 import Button from '../Button';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
+import { RecipeImage, RecipeInfoContainer, RecipeInfoText, RecipeList, RecipeListItem, RecipeSection, RecipeSectionTitle, RecipeTitle } from './RecipeInfoStyle';
 
 type Props = {
-	recipe: any;
-	updateRecipe: any;
+	recipe: Recipe | undefined;
+	updateRecipe: (recipe: ShortRecipe) => void;
 };
 
 const RecipeInfo = ({ recipe, updateRecipe }: Props) => {
 	const router = useRouter();
 	return (
-		<>
+		<RecipeInfoContainer>
 			{recipe && (
-				<div>
-					<h1>{recipe.title}</h1>
-					<Image
+				<>
+					<RecipeTitle>{recipe.title}</RecipeTitle>
+					<RecipeImage
 						src={recipe.image}
 						width={300}
 						height={300}
 						alt='This Recipe has no Image'
 					/>
-					<div>
-						<h2>Ingredients:</h2>
-						<ul>
+					<RecipeSection>
+						<RecipeSectionTitle>Ingredients:</RecipeSectionTitle>
+						<RecipeList>
 							{recipe.extendedIngredients.map((ingredient: any, i: number) => (
-								<li key={i}>{ingredient.original}</li>
+								<RecipeListItem key={i}>{ingredient.original}</RecipeListItem>
 							))}
-						</ul>
-					</div>
-					<div>
-						<h2>Instructions:</h2>
-						<ol>
-							{recipe.analyzedInstructions[0]?.steps.map((step: any, i: number) => (
-								<li key={i}>{step.step}</li>
-							))}
-						</ol>
-					</div>
-					<p>Source: {recipe.sourceName}</p>
-					<p>Servings: {recipe.servings}</p>
-					<p>Ready in: {recipe.readyInMinutes} minutes</p>
+						</RecipeList>
+					</RecipeSection>
+					<RecipeSection>
+						<RecipeSectionTitle>Instructions:</RecipeSectionTitle>
+						<RecipeList as='ol'>
+							{recipe.analyzedInstructions[0]?.steps.map(
+								(step: any, i: number) => (
+									<RecipeListItem key={i}>{step.step}</RecipeListItem>
+								)
+							)}
+						</RecipeList>
+					</RecipeSection>
+					<RecipeInfoText>Source: {recipe.sourceName}</RecipeInfoText>
+					<RecipeInfoText>Servings: {recipe.servings}</RecipeInfoText>
+					<RecipeInfoText>
+						Ready in: {recipe.readyInMinutes} minutes
+					</RecipeInfoText>
 					<Button
 						title='Add to List'
 						onClick={() => {
@@ -48,9 +52,9 @@ const RecipeInfo = ({ recipe, updateRecipe }: Props) => {
 						}}
 					/>
 					<Button title='Back' onClick={() => router.back()} />
-				</div>
+				</>
 			)}
-		</>
+		</RecipeInfoContainer>
 	);
 };
 

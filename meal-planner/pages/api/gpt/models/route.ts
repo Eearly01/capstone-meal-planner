@@ -15,7 +15,7 @@ const Handler = async (req: NextApiRequest, res: NextApiResponse) => {
 			{
 				prompt: `${question}`,
 				model: 'text-davinci-003',
-				max_tokens: 50,
+				max_tokens: 500,
 				temperature: 1.0,
 			},
 			headers
