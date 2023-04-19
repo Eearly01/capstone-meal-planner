@@ -1,4 +1,4 @@
-import React, { Children } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router'
 import { NavLinkProps } from '@/types/propTypes';
 import { NavLink as Link } from './NavElement'

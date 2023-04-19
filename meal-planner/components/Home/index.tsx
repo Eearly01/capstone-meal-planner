@@ -8,9 +8,10 @@ import {
 import { useSession } from 'next-auth/react';
 import { UserProfile } from '@/types';
 import RecipeCard from './RecipeCard';
-import { Container, SearchBar, PageButtons } from './HomeElements';
+import { Container, PageButtons } from './HomeElements';
 import { EthButton } from '../Button/EthButton';
 import Button from '../Button';
+import SearchBar from './SearchBar';
 
 export default function Home() {
 	const [recipeList, setRecipeList] = useState<ShortRecipe[]>();
@@ -19,18 +20,20 @@ export default function Home() {
 	const { data: session, update }: any = useSession();
 	const [pageOffset, setPageOffset] = useState(0);
 	const [disabled, setDisabled] = useState(true);
+	const [advancedSearch, setAdvancedSearch] = useState(false);
+
 
 const getRecipes = async () => {
-	if (paramList?.query) {
-		const config = {
-			method: 'GET',
-			url: 'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/complexSearch',
-			params: { ...paramList, number: 12, offset: pageOffset },
-			headers: {
-				'X-RapidAPI-Key': process.env.RECIPEAPI_KEY,
-				'X-RapidAPI-Host': process.env.RECIPEAPI_HOST,
-			},
-		};
+    if (paramList?.query) {
+        const config = {
+            method: 'GET',
+            url: 'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/complexSearch',
+            params: { ...paramList, number: 12, offset: pageOffset, ...advancedSearch && { isAdvancedSearch: true } },
+            headers: {
+                'X-RapidAPI-Key': process.env.RECIPEAPI_KEY,
+                'X-RapidAPI-Host': process.env.RECIPEAPI_HOST,
+            },
+        };
 
 		try {
 			const res = await axios(config);
@@ -81,19 +84,10 @@ useEffect(() => {
 	return (
 		<>
 			<Container>
-				<SearchBar>
-					<form onSubmit={formSubmit}>
-						Search:{' '}
-						<input type='text' name='query' onChange={handleInputChange} />
-						<EthButton
-							text={'Submit'}
-							label={'Button'}
-							onClick={() => {
-								<input type='submit' value='Submit' />;
-							}}
-						/>
-					</form>
-				</SearchBar>
+				<SearchBar
+					formSubmit={formSubmit}
+					handleInputChange={handleInputChange}
+				/>
 			</Container>
 			<RecipeCard
 				recipeList={recipeList}
@@ -101,18 +95,6 @@ useEffect(() => {
 				buttonTitle='Add To List'
 			/>
 			<PageButtons disabled={disabled}>
-				<Button
-					title='Next Page'
-					disabled={disabled}
-					onClick={async () => {
-						setPageOffset(
-							(prevOffset) => prevOffset + (paramList?.offset || 12)
-						);
-						await getRecipes();
-						setUpdated(!updated);
-					}}
-				/>
-
 				<Button
 					title='Prev Page'
 					disabled={disabled}
@@ -130,6 +112,18 @@ useEffect(() => {
 					disabled={disabled}
 					onClick={async () => {
 						setPageOffset(0);
+						await getRecipes();
+						setUpdated(!updated);
+					}}
+				/>
+
+				<Button
+					title='Next Page'
+					disabled={disabled}
+					onClick={async () => {
+						setPageOffset(
+							(prevOffset) => prevOffset + (paramList?.offset || 12)
+						);
 						await getRecipes();
 						setUpdated(!updated);
 					}}
