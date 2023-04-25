@@ -41,4 +41,4 @@ npm run dev | npm start
 
 ### live link
 
-- https://git.heroku.com/meal-planner-eearly.git
+- https://meal-planner-eearly.herokuapp.com/

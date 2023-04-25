@@ -14,7 +14,7 @@ export default function ViewRecipe(id: any) {
 	const getRecipeDetails = async () => {
 		const config = {
 			method: 'GET',
-			url: `https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/${id.id}/information`,
+			url: `https://${process.env.RECIPEAPI_HOST}/recipes/${id.id}/information`,
 			headers: {
 				'X-RapidAPI-Key': process.env.RECIPEAPI_KEY,
 				'X-RapidAPI-Host': process.env.RECIPEAPI_HOST,
