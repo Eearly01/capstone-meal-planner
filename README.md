@@ -7,7 +7,7 @@
     ```
 ### instruction for running
 
-At the moment all routes point to the Render deployment and will can only be viewed through them.
+npm run dev | npm start
 
 ### Created By
 
@@ -41,4 +41,4 @@ At the moment all routes point to the Render deployment and will can only be vie
 
 ### live link
 
-- https://meal-planner-kd70.onrender.com
+- https://git.heroku.com/meal-planner-eearly.git
